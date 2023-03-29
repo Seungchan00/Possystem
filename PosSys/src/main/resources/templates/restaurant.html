@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant Form</title>
+</head>
+<body>
+<h1>Add a New Restaurant</h1>
+<form method="POST" action="/position">
+  <label for="restaurant_id">Restaurant ID:</label>
+  <input type="text" id="restaurant_id" name="restaurant_id"><br><br>
+  <label for="restaurant_name">Restaurant Name:</label>
+  <input type="text" id="restaurant_name" name="restaurant_name"><br><br>
+  <label for="restaurant_location">Restaurant Location:</label>
+  <input type="text" id="restaurant_location" name="restaurant_location"><br><br>
+  <label for="table_x">Table X:</label>
+  <input type="text" id="table_x" name="table_x"><br><br>
+  <label for="table_y">Table Y:</label>
+  <input type="text" id="table_y" name="table_y"><br><br>
+  <input type="submit" value="Submit">
+</form>
+{{#if restaurant_id}}
+<h2>Restaurant Information</h2>
+<p>Restaurant ID: {{restaurant_id}}</p>
+<p>Restaurant Name: {{restaurant_name}}</p>
+<p>Restaurant Location: {{restaurant_location}}</p>
+<p>Table X: {{table_x}}</p>
+<p>Table Y: {{table_y}}</p>
+{{/if}}
+</body>
+</html>

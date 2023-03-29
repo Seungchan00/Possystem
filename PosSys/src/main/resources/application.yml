@@ -1,0 +1,23 @@
+
+spring:
+    datasource:
+        url: jdbc:mysql://52.44.116.58:3306/pos_data?serverTimezone=UTC&characterEncoding=UTF-8
+        username: user99
+        password: Ckddnjs12!
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                show_sql: true
+                format_sql: true
+
+# org.hibernate.type: trace #??? ?? 2.x, hibernate5
+
+logging:
+    pattern:
+        level:
+            org.hibernate.SQL: debug
+            org.hibernate.orm.jdbc.bind: trace #??? ?? 3.x, hibernate6
+
