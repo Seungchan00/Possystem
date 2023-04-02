@@ -8,7 +8,7 @@ import lombok.Setter;
 public class MenuRequest {
 
     private long table_id;
-    private String menu;
-    private String menu_num;
-
+    private String menu_name;
+    private int menu_count;
+    private int table_people;
 }

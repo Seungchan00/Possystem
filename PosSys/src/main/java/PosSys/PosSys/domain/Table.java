@@ -1,3 +1,4 @@
+/*
 package PosSys.PosSys.domain;
 
 
@@ -25,8 +26,9 @@ public class Table {
     // JoinColumn: 외래 키를 매핑할 때 사용하는 어노테이션
 
 
-   // @OneToMany(mappedBy = "table",fetch = FetchType.LAZY)
-   // private List<TableInfo> tableInfoList = new ArrayList<>();
+    @OneToMany(mappedBy = "table",fetch = FetchType.LAZY)
+    private List<TableInfo> tableInfoList = new ArrayList<>();
 
 
 }
+*/

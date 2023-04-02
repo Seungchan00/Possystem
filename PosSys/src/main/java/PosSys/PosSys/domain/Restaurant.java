@@ -6,12 +6,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter @Setter
 @jakarta.persistence.Table(name = "restaurant")
 public class Restaurant {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "restaurant_id")
     private Long id;
     @Column(name = "restaurant_name")
@@ -19,8 +23,8 @@ public class Restaurant {
     @Column(name = "restaurant_location")
     private String location;
 
-    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Table table;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TableInfo> tableInfoList = new ArrayList<>();
 
 
     public void change(String name, String location) {

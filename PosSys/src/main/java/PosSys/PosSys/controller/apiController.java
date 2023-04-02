@@ -1,17 +1,99 @@
 package PosSys.PosSys.controller;
 
 
-import org.springframework.stereotype.Controller;
+import PosSys.PosSys.domain.Menu;
+import PosSys.PosSys.domain.Restaurant;
+import PosSys.PosSys.domain.TableInfo;
+import PosSys.PosSys.domain.TableSeat;
+import PosSys.PosSys.service.MenuService;
+import PosSys.PosSys.service.RestaurantService;
+import PosSys.PosSys.service.TableInfoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
+@RequiredArgsConstructor
+
 public class apiController {
 
+    private final RestaurantService restaurantService;
+    private final TableInfoService tableInfoService;
+    private final MenuService menuService;
 
+    @PostMapping("/first")
+    public void CreateRestaurant(@RequestBody RestaurantRequest request){               //처음에 insert 식당 정보
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(request.getRestaurant_id());
+        restaurant.setName(request.getRestaurant_name());
+        restaurant.setLocation(request.getRestaurant_location());
+
+        System.out.println(request.getRestaurant_id()+request.getRestaurant_name()+request.getRestaurant_location());
+        restaurantService.saveRestaurant(restaurant);
+    }
+    @PostMapping("/position")
+    public void Createtable(@RequestBody PositionRequset request){                  // 처음 자리정보들 업데이트
+        TableInfo tableInfo = new TableInfo();
+
+        tableInfo.setTable_x(request.getTable_x());
+        tableInfo.setTable_y(request.getTable_y());
+        tableInfo.setId(request.getTable_id());
+        tableInfo.setTable_seat(TableSeat.NOSEATED);
+        Long restaurantId = request.getRestaurant_id();
+        Restaurant restaurant = restaurantService.findOne(restaurantId);
+        tableInfo.setRestaurant(restaurant);
+
+        tableInfoService.saveTable(tableInfo);
+
+    }
+
+    @GetMapping("/restaurant")
+    public String showRestaruant(Model model){
+        List<Restaurant> restaurants = restaurantService.findRestaurants();
+        model.addAttribute("restaurants",restaurants);
+        return "/restaurants/restaurantlist";
+    }
+    @PostMapping("/menu")// menu 기능
+    public void addMenu(@RequestBody MenuRequest request){              //메뉴추가     Table_id, Menu_name ,Menu_count
+        Menu menu = new Menu();
+
+        menu.setMenu_name(request.getMenu_name());
+        menu.setMenu_count(request.getMenu_count());
+
+        Long tableInfoId= request.getTable_id();
+        TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);
+        tableinfo.setTable_seat(TableSeat.SEATED);
+        tableinfo.setTable_people(request.getTable_people());
+        menu.setTableInfo(tableinfo);
+
+
+        System.out.println(request.getMenu_name()+request.getMenu_count()+request.getTable_id());
+        tableInfoService.saveTable(tableinfo);
+        menuService.saveMenu(menu);
+
+    }
+    @PostMapping("/update_table_status")
+    public void UpdateSeat(@RequestBody UpdateRequest request){         // table_id , Tableseat  테이블 번호, 테이블 정보
+        UpdateRequest updateRequest = new UpdateRequest();
+
+        Long tableInfoId = request.getTable_id();
+        TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);
+
+        //if(request.getTableSeat() == false) {
+            tableinfo.setTable_seat(TableSeat.NOSEATED);
+        //}
+        tableinfo.setTable_people(0);
+
+        tableInfoService.saveTable(tableinfo);
+    }
+
+
+/*
     @PostMapping("/position")
     public String addRestaurant(@RequestBody RestaurantRequest request, Model model) {
         model.addAttribute("restaurant_id", request.getRestaurant_id());
@@ -19,6 +101,7 @@ public class apiController {
         model.addAttribute("restaurant_location", request.getRestaurant_location());
         model.addAttribute("table_x", request.getTable_x());
         model.addAttribute("table_y", request.getTable_y());
+        RestaurantService.saveRestaurant(request);
         return "restaurant";
     }
 
@@ -29,7 +112,7 @@ public class apiController {
         model.addAttribute("menu_num", request.getMenu_num());
 
         return "restaurant";
-    }
+    }*/
 }
   /*
 }
