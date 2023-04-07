@@ -25,9 +25,13 @@ public class TableInfoService {
         return tableInfoRepository.findOne(tableinfoId);
     }
 
-    public List<TableInfo> findRestaurants(){
+    public List<TableInfo> findtableinfos(){
         return tableInfoRepository.findAll();
     }
+    public List<TableInfo> findtableinfobyid(Long restaurantid){
+        return tableInfoRepository.findAllbyRestaurantid(restaurantid);
+    }
+
    // @Transactional(readOnly = false)
    // public void updateTableseat(Long id , TableSeat tableSeat){
    //    tableInfoRepository.UpdateTableSeat(id,tableSeat);

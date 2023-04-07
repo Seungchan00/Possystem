@@ -26,5 +26,8 @@ public class RestaurantService {
     public List<Restaurant> findRestaurants(){
         return restaurantRepository.findAll();
     }
+    public Restaurant findByname(String name){
+        return (Restaurant)restaurantRepository.findByPartialName(name);
+    }
 
 }

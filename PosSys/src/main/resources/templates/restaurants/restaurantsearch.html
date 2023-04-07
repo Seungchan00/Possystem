@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant Search</title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+    <form th:action="@{/restaurants/search}" method="get">
+        <div class="form-group">
+            <label th:for="name">식당 이름</label>
+            <input type="text" id="name" name="name" class="form-control"
+                   placeholder="식당 이름을 입력하세요" required>
+        </div>
+        <button type="submit" class="btn btn-primary">검색</button>
+    </form>
+    <div th:if="${restaurant}">
+        <p th:text="${restaurant.name}"></p>
+        <p th:text="${restaurant.address}"></p>
+    </div>
+</div>
+</body>
+</html>

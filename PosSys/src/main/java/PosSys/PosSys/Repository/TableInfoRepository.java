@@ -32,6 +32,10 @@ public class TableInfoRepository {
     public List<TableInfo> findAll () {
         return em.createQuery("select T from TableInfo T", TableInfo.class).getResultList();
     }
+    public List<TableInfo> findAllbyRestaurantid(Long id){
+        return em.createQuery("SELECT t FROM TableInfo t where t.restaurant.id = :id", TableInfo.class).setParameter(
+                "id",id).getResultList();
+    }
   //  public void UpdateTableSeat(Long id , TableSeat tableSeat){
    //     TableInfo tableinfo = new TableInfo();
     //    if()

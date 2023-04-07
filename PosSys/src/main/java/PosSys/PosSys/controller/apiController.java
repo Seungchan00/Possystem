@@ -52,12 +52,7 @@ public class apiController {
 
     }
 
-    @GetMapping("/restaurant")
-    public String showRestaruant(Model model){
-        List<Restaurant> restaurants = restaurantService.findRestaurants();
-        model.addAttribute("restaurants",restaurants);
-        return "/restaurants/restaurantlist";
-    }
+
     @PostMapping("/menu")// menu 기능
     public void addMenu(@RequestBody MenuRequest request){              //메뉴추가     Table_id, Menu_name ,Menu_count
         Menu menu = new Menu();
@@ -67,14 +62,25 @@ public class apiController {
 
         Long tableInfoId= request.getTable_id();
         TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);
-        tableinfo.setTable_seat(TableSeat.SEATED);
-        tableinfo.setTable_people(request.getTable_people());
+       // tableinfo.setTable_seat(TableSeat.SEATED);
+       // tableinfo.setTable_people(request.getTable_people());
         menu.setTableInfo(tableinfo);
 
 
         System.out.println(request.getMenu_name()+request.getMenu_count()+request.getTable_id());
-        tableInfoService.saveTable(tableinfo);
+       // tableInfoService.saveTable(tableinfo);
         menuService.saveMenu(menu);
+
+    }
+    @PostMapping("/person")
+    public void addPerson(@RequestBody MenuRequest request){
+
+        Long tableinfoid = request.getTable_id();
+        TableInfo tableinfo = tableInfoService.findOne(tableinfoid);
+        tableinfo.setTable_people(request.getTable_people());
+        tableinfo.setTable_seat(TableSeat.SEATED);
+
+        tableInfoService.saveTable(tableinfo);
 
     }
     @PostMapping("/update_table_status")

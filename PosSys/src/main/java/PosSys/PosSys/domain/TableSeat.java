@@ -2,5 +2,5 @@ package PosSys.PosSys.domain;
 
 public enum TableSeat {
 
-    SEATED , NOSEATED
+    SEATED , NOSEATED //, RESERVED
 }

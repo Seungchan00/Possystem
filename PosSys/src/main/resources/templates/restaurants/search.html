@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+  <h1>Search Results</h1>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Address</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${restaurants.isEmpty()}">
+      <td colspan="4">No results found.</td>
+    </tr>
+    <tr th:each="restaurant : ${restaurants}">
+      <td th:text="${restaurant.id}"></td>
+      <td th:text="${restaurant.name}"></td>
+      <td th:text="${restaurant.address}"></td>
+      <td>
+       <!-- <a href="#" th:href="@{/restaurants/{restaurantsid}/button(restaurantsid=${restaurant.id})}" -->
+           class="btn btn-primary" role="button">테이블 조회</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

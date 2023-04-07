@@ -16,13 +16,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="restaurant : ${restaurants}">
+      <tr th:each="restaurant : ${restaurantlist}">
         <td th:text="${restaurant.id}"></td>
         <td th:text="${restaurant.name}"></td>
         <td th:text="${restaurant.location}"></td>
         <td>
-          <a href="#" th:href="@{/items/{id}/edit (id=${item.id})}"
-             class="btn btn-primary" role="button">장식</a>
+          <a href="#" th:href="@{/restaurants/{restaurantsid}/botton(restaurantsid=${restaurant.id})}"
+             class="btn btn-primary" role="button">테이블 조회</a>
         </td>
       </tr>
       </tbody>

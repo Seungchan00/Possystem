@@ -37,6 +37,12 @@ public class RestaurantRepository {
             return em.createQuery("select r from Restaurant r", Restaurant.class).getResultList();
         }
 
+    public List<Restaurant> findByPartialName(String partialName) {
+        return em.createQuery("select r from Restaurant r where r.name like concat('%', :name, '%')", Restaurant.class)
+                .setParameter("name", partialName)
+                .getResultList();
+    }
+
 
 
 }
