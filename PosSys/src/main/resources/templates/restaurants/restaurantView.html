@@ -3,7 +3,7 @@
 <head th:replace="fragments/header :: header" />
 <body>
 <div class="container">
-  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+  <div th:replace="fragments/bodyHeader :: bodyHeader"></div>\
   <div>
     <table class="table table-striped">
       <thead>
@@ -21,7 +21,7 @@
         <td th:text="${restaurant.name}"></td>
         <td th:text="${restaurant.location}"></td>
         <td>
-          <a href="#" th:href="@{/restaurants/{restaurantsid}/botton(restaurantsid=${restaurant.id})}"
+          <a href="#" th:href="@{/restaurants/{restaurantsid}/button(restaurantsid=${restaurant.id})}"
              class="btn btn-primary" role="button">테이블 조회</a>
         </td>
       </tr>

@@ -19,7 +19,7 @@ public class TableInfoController {
     private final RestaurantService restaurantService;
 
 
-    @GetMapping("/restaurants/{restaurantid}/botton")
+    @GetMapping("/restaurants/{restaurantid}/button")
     public String showTableinfo(@PathVariable("restaurantid")Long restaurantsid, Model model){
 
        Restaurant restaurant = restaurantService.findOne(restaurantsid);                   //restaurantid값을 받아서 찾음 식당객체를 가져옴
@@ -27,7 +27,7 @@ public class TableInfoController {
         List<TableInfo> tableInfos = tableInfoService.findtableinfobyid(restaurantsid);
         model.addAttribute("tableInfos",tableInfos);
 
-        return "restaurants/restaurantbotton";
+        return "restaurants/restaurantbutton";
     }
 
 

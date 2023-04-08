@@ -1,37 +1,32 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
 <body>
 <div class="container">
-  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-  <h1>Search Results</h1>
   <table class="table">
     <thead>
     <tr>
       <th>Id</th>
       <th>Name</th>
       <th>Address</th>
-
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${restaurants.isEmpty()}">
-      <td colspan="4">No results found.</td>
+    <tr th:if="${restaurants == null}">
+      <td colspan="3">No results found.</td>
     </tr>
-    <tr th:each="restaurant : ${restaurants}">
+    <tr th:each="restaurant : ${restaurants}" th:if="${restaurants != null}">
       <td th:text="${restaurant.id}"></td>
       <td th:text="${restaurant.name}"></td>
-      <td th:text="${restaurant.address}"></td>
+      <td th:text="${restaurant.location}"></td>
       <td>
-       <!-- <a href="#" th:href="@{/restaurants/{restaurantsid}/button(restaurantsid=${restaurant.id})}" -->
+        <a href="#" th:href="@{/restaurants/{restaurantsid}/button(restaurantsid=${restaurant.id})}"
            class="btn btn-primary" role="button">테이블 조회</a>
       </td>
     </tr>
     </tbody>
   </table>
+  <div th:replace="fragments/footer :: footer"/>
 </div>
 </body>
 </html>

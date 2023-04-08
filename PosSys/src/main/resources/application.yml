@@ -7,7 +7,7 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
         hibernate:
-            ddl-auto: create        #create (시작할때 create한다.   update drop안함
+            ddl-auto: update        #create (시작할때 create한다.   update drop안함
         properties:
             hibernate:
                 show_sql: true

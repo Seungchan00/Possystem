@@ -27,14 +27,25 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/restaurantsearch")
+    @GetMapping("/restaurantsearchname")
     public String searchRestaurantForm(){
         return "/restaurants/restaurantsearch";
     }
 
-    @GetMapping("/restaurants/restaurantsearch{name}")
-    public String searchrestaurant(@PathVariable("name") String name, Model model){
-        Restaurant restaurants = restaurantService.findByname(name);
+    @PostMapping("/restaurants/search")
+    public String searchRestaurant(@RequestParam("name") String name, Model model) {
+        List<Restaurant> restaurants = restaurantService.findByname(name);
+        if(restaurants == null || restaurants.isEmpty()) {
+            model.addAttribute("error", "해당하는 식당을 찾을 수 없습니다.");
+        } else {
+            model.addAttribute("restaurants", restaurants);
+        }
+        return "restaurants/search";
+    }
+/*
+    @GetMapping("/restaurants/{restaurant_name}search")
+    public String searchrestaurant(@PathVariable("restaurant_name") String restaurantname, Model model){
+        List<Restaurant> restaurants = restaurantService.findByname(restaurantname);
         if(restaurants == null){
             model.addAttribute("error", "해당하는 식당을 찾을수없습니다.");
         }else {
@@ -42,7 +53,7 @@ public class RestaurantController {
         }
         return "restaurants/search";
     }
-
+*/
 
 
 }

@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Member {
     @Id
-    @Column(name = "username",nullable=false, unique=true)
-    private String username;
+    @Column(name = "userid",nullable=false, unique=true)
+    private String id;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -23,4 +23,11 @@ public class Member {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+
+    public Member(String id, String password, String name, String phoneNumber) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
 }
