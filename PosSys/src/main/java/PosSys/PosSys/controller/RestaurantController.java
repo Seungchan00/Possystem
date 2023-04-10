@@ -39,6 +39,7 @@ public class RestaurantController {
             model.addAttribute("error", "해당하는 식당을 찾을 수 없습니다.");
         } else {
             model.addAttribute("restaurants", restaurants);
+
         }
         return "restaurants/search";
     }

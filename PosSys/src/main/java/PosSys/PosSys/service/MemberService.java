@@ -13,12 +13,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
+
         this.memberRepository = memberRepository;
     }
 
     public void saveMember(Member member) {
         memberRepository.save(member);
     }
+
     public Member login(String id, String password) {
         return memberRepository.findByIdAndPassword(id, password);
     }
@@ -27,9 +29,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member findMemberById(Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid member Id:" + id));
+    public Member findMemberById(String id) {
+        return memberRepository.findById(id);
     }
 
     public Member findMemberByUsername(String username) {

@@ -2,6 +2,7 @@ package PosSys.PosSys.controller;
 
 import PosSys.PosSys.domain.Member;
 import PosSys.PosSys.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,13 +39,14 @@ public class MemberController {
 
     // 로그인 처리
     @PostMapping("/login")
-    public String login(@RequestParam("id") String id, @RequestParam("password") String password, Model model) {
+    public String login(@RequestParam("id") String id, @RequestParam("password") String password, Model model, HttpSession session) {
         Member member = memberService.login(id, password);
         if(member == null) {
             model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
             return "redirect:/member/login";
         }
         model.addAttribute("member", member);
+        session.setAttribute("id", id);
         return "/home";
     }
 

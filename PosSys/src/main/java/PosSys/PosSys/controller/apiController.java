@@ -55,28 +55,36 @@ public class apiController {
 
     @PostMapping("/menu")// menu 기능
     public void addMenu(@RequestBody MenuRequest request){              //메뉴추가     Table_id, Menu_name ,Menu_count
-        Menu menu = new Menu();
 
-        menu.setMenu_name(request.getMenu_name());
-        menu.setMenu_count(request.getMenu_count());
-
+        List<String> menuList = request.getMenu();
+        List<Integer> quantityList = request.getQuantity();
         Long tableInfoId= request.getTable_id();
         TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);
-       // tableinfo.setTable_seat(TableSeat.SEATED);
-       // tableinfo.setTable_people(request.getTable_people());
-        menu.setTableInfo(tableinfo);
 
 
-        System.out.println(request.getMenu_name()+request.getMenu_count()+request.getTable_id());
-       // tableInfoService.saveTable(tableinfo);
-        menuService.saveMenu(menu);
-
+        for (int i = 0; i < menuList.size(); i++) {
+            Menu menu = new Menu();
+            menu.setMenu_name(menuList.get(i));
+            menu.setMenu_count(quantityList.get(i));
+            menu.setTableInfo(tableinfo);
+            menuService.saveMenu(menu);
+        }
     }
+        //System.out.println(request.getMenu_name()+request.getMenu_count()+request.getTable_id());
+        //menu.setMenu_name(request.getMenu_name());
+        //menu.setMenu_count(request.getMenu_count());
+        // tableinfo.setTable_seat(TableSeat.SEATED);
+        // tableinfo.setTable_people(request.getTable_people());
+
+       // tableInfoService.saveTable(tableinfo);
+        //menuService.saveMenu(menu);
+
     @PostMapping("/person")
     public void addPerson(@RequestBody MenuRequest request){
 
         Long tableinfoid = request.getTable_id();
         TableInfo tableinfo = tableInfoService.findOne(tableinfoid);
+
         tableinfo.setTable_people(request.getTable_people());
         tableinfo.setTable_seat(TableSeat.SEATED);
 
@@ -84,14 +92,14 @@ public class apiController {
 
     }
     @PostMapping("/update_table_status")
-    public void UpdateSeat(@RequestBody UpdateRequest request){         // table_id , Tableseat  테이블 번호, 테이블 정보
+    public void UpdateSeat(@RequestBody UpdateRequest request){         // table_id , Tableseat  테이블 번호, 테이블 정보 --> 결제했을때 테이블 정보 reset
         UpdateRequest updateRequest = new UpdateRequest();
 
         Long tableInfoId = request.getTable_id();
-        TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);
+        TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);           // 나중에 DB에 저장하려면 table id 로 조회한뒤에 entity만들어진거에 인원수,메뉴정보,시작시간,끝시간,저장
 
         //if(request.getTableSeat() == false) {
-            tableinfo.setTable_seat(TableSeat.NOSEATED);
+        tableinfo.setTable_seat(TableSeat.NOSEATED);
         //}
         tableinfo.setTable_people(0);
 

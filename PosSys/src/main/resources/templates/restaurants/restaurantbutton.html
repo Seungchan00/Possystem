@@ -13,9 +13,11 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
         <div th:each="tableinfo : ${tableInfos}">
-            <button th:text="${tableinfo.id}"
-                    th:style="${tableinfo.table_seat == T(PosSys.PosSys.domain.TableSeat).SEATED} ? 'background-color:green; position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px; width:50px; height:50px;'
-        : 'background-color:red; position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px; width:50px; height:50px;'"></button>
+            <a th:href="@{/reservation/{tableid}/new(tableid=${tableinfo.id})}"
+                th:text="${tableinfo.id}"
+                th:style="${tableinfo.table_seat == T(PosSys.PosSys.domain.TableSeat).SEATED} ? 'background-color:green; position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px; width:50px; height:50px;'
+                : 'background-color:red; position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px; width:50px; height:50px;'">
+            </a>
         </div>
     </div>
     <div th:replace="fragments/footer :: footer"/>

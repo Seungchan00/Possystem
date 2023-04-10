@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservation List</title>
+</head>
+<body>
+<h1>Reservation List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>식당 이름</th>
+    <th>예약자 이름</th>
+    <th>인원수</th>
+    <th>예약 상태</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="reservation : ${reservations}">
+    <td th:text="${reservation.restaurant.name}"></td>
+    <td th:text="${reservation.member.name}"></td>
+    <td th:text="${reservation.people}"></td>
+    <td th:text="${reservation.reservationstatus}"></td>
+    <td>
+      <form method="post" action="/reservation/cancel" th:if="${reservation.reservationstatus == 'RESERVED'}">
+        <input type="hidden" name="id" th:value="${reservation.id}">
+        <button type="submit">Cancel</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
