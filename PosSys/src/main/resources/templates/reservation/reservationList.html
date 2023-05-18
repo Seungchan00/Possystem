@@ -1,3 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+  <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>식당 이름</th>
+      <th>예약자 이름</th>
+      <th>인원수</th>
+      <th>예약상태</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${reservations == null}">
+      <td colspan="3">No results found.</td>
+    </tr>
+    <tr th:each="reservation : ${reservations}">
+      <td th:text="${reservation.restaurant.name}"></td>
+      <td th:text="${reservation.member.name}"></td>
+      <td th:text="${reservation.people}"></td>
+      <td th:text="${reservation.reservationstatus == T(PosSys.PosSys.domain.Reservationstatus).RESERVED} ? '예약 완료' : '예약 대기'"></td>
+
+      <td>
+        <form method="post" action="/reservation/cancel" th:if="${reservation.reservationstatus == 'RESERVED'}">
+          <input type="hidden" name="id" th:value="${reservation.id}">
+          <button type="submit">예약취소</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>
+
+<!--
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -5,8 +45,9 @@
   <title>Reservation List</title>
 </head>
 <body>
-<h1>Reservation List</h1>
-<table>
+<div class="container">
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+<h1>예약 내역</h1>
   <thead>
   <tr>
     <th>식당 이름</th>
@@ -30,6 +71,8 @@
     </td>
   </tr>
   </tbody>
-</table>
+</div>
 </body>
 </html>
+
+-->

@@ -36,10 +36,13 @@ public class TableInfoRepository {
         return em.createQuery("SELECT t FROM TableInfo t where t.restaurant.id = :id", TableInfo.class).setParameter(
                 "id",id).getResultList();
     }
-  //  public void UpdateTableSeat(Long id , TableSeat tableSeat){
-   //     TableInfo tableinfo = new TableInfo();
-    //    if()
 
-  //  }
-
+    public void updateRemainingTime(Long id, int remainingTime) {
+        TableInfo tableInfo = findOne(id);
+        tableInfo.setRemaintime(remainingTime);
+    }
 }
+
+
+
+

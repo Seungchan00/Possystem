@@ -3,7 +3,7 @@
 <head th:replace="fragments/header :: header" />
 <body>
 <div class="container">
-    <div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
+    <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
     <form th:action="@{/restaurants/{restaurant_name}search(restaurant_name=${name})}" method="post">
         <div class="form-group">
             <label th:for="name">식당 이름</label>
@@ -12,6 +12,11 @@
             <button type="submit" class="btn btn-primary">검 색</button>
         </div>
     </form>
+
+    <div th:if="${error != null}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
 </div>
 </body>
 </html>

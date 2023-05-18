@@ -3,12 +3,12 @@
 <head th:replace="fragments/header :: header" />
 <body>
 <div class="container">
+  <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
   <table class="table">
     <thead>
     <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Address</th>
+      <th>식당이름</th>
+      <th>주소</th>
     </tr>
     </thead>
     <tbody>
@@ -16,7 +16,6 @@
       <td colspan="3">No results found.</td>
     </tr>
     <tr th:each="restaurant : ${restaurants}" th:if="${restaurants != null}">
-      <td th:text="${restaurant.id}"></td>
       <td th:text="${restaurant.name}"></td>
       <td th:text="${restaurant.location}"></td>
       <td>

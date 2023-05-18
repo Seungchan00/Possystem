@@ -15,4 +15,5 @@ public class MenuRequest {
     private List<String> menu;
     private List<Integer> quantity;
     private int table_people;
+    private int remaintime;
 }

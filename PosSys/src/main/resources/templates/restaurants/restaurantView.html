@@ -3,21 +3,19 @@
 <head th:replace="fragments/header :: header" />
 <body>
 <div class="container">
-  <div th:replace="fragments/bodyHeader :: bodyHeader"></div>\
+  <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
   <div>
     <table class="table table-striped">
       <thead>
       <tr>
-        <th>#</th>
-        <th>식당ID</th>
         <th>식당이름</th>
         <th>식당위치</th>
+        <th>테이블조회</th>
         <th></th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="restaurant : ${restaurantlist}">
-        <td th:text="${restaurant.id}"></td>
         <td th:text="${restaurant.name}"></td>
         <td th:text="${restaurant.location}"></td>
         <td>

@@ -1,8 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<style>
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: inline;
+  }
+</style>
 <div class="header" th:fragment="bodyHeader">
   <ul class="nav nav-pills pull-right">
-    <li><a href="/">Home</a></li>
+    <li><a class="btn btn-lg btn-info" href="/" style="margin-right: 10px;">Home</a></li>
+    <li><a class="btn btn-lg btn-info" href="/reservation/reservationcheck" style="margin-right: 10px;">예약 조회</a></li>
+    <li><a class="btn btn-lg btn-info" href="/restaurantsearchname"style="margin-right: 10px;">식당 조회</a></li>
+    <li><a class="btn btn-lg btn-info" href="#">회원 정보 수정</a></li>
+    <!--  <a th:href="${session['memberId'] != null} ? '/logout' : '/login'" class="btn btn-lg btn-danger">
+    <span th:text="${session['memberId'] != null} ? '로그아웃' : '로그인'"></span>
+    </a>
+    -->
   </ul>
-  <a href="/"><h3 class="text-muted">Real time table</h3></a>
 </div>

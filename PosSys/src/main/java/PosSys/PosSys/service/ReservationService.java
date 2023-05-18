@@ -56,4 +56,12 @@ public class ReservationService {
     public List<Reservation> getReservationsByMemberAndRestaurant(Member member, Restaurant restaurant) {
         return reservationRepository.findByMemberAndRestaurant(member, restaurant);
     }
+    public List<Reservation> getReservationsByRestaurantId(Long restaurantId) {
+        return reservationRepository.findByRestaurantId(restaurantId);
+    }
+    @Transactional(readOnly = false)
+    public List<Reservation> getReservationsByRestaurantIdTableId(Long restaurant_id, Long table_number) {
+        return reservationRepository.getReservationsByRestaurantIdTableId(restaurant_id, table_number);
+
+    }
 }

@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header">
+<div th:replace="~{fragments/header :: header}"></div>
     <title>Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 <div class="container">
-    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
     <div class="jumbotron">
         <h1>실시간 테이블 조회 시스템</h1>
         <p class="lead">실시간 테이블 조회</p>
@@ -17,15 +17,15 @@
         <p class="lead">상품 기능</p>
         <p>
             <a class="btn btn-lg btn-dark" href="/reservation/reservationcheck">예약조회</a>
-            <a class="btn btn-lg btn-dark" href="/items">테스트</a>
+            <a class="btn btn-lg btn-dark" href="/items">준비중</a>
         </p>
         <p class="lead">주문 기능</p>
         <p>
-            <a class="btn btn-lg btn-info" href="/order">테스트</a>
-            <a class="btn btn-lg btn-info" href="/orders">테스트</a>
+            <a class="btn btn-lg btn-info" href="/order">준비중</a>
+            <a class="btn btn-lg btn-info" href="/orders">준비중</a>
         </p>
     </div>
-    <div th:replace="fragments/footer :: footer" />
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div> <!-- /container -->
 </body>
 </html>

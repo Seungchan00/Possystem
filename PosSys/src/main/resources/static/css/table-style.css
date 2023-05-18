@@ -1,0 +1,47 @@
+/* 버튼 컨테이너 */
+.button-container {
+    display: inline-block;
+    position: relative;
+}
+@media (max-width: 600px) {
+    .button {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+}
+/* 버튼 */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #428bca;
+}
+
+/* 버튼 내부에 아이콘 */
+.button i {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* 예약 가능한 버튼 */
+.button-available {
+    background-color: #5cb85c;
+}
+
+/* 예약 불가능한 버튼 */
+.button-unavailable {
+    background-color: #d9534f;
+}
+
+/* 버튼 위에 호버링시 색 변화 */
+.button:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}

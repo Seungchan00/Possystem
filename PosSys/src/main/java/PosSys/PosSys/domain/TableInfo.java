@@ -38,6 +38,9 @@ public class TableInfo {
 
     private LocalDateTime table_endtime;
 
+    @Column(name = "remaintime")
+    private int remaintime;
+
 
 
 

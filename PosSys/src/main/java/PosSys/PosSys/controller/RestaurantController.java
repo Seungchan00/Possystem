@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 @Controller
 @RequiredArgsConstructor
-public class RestaurantController {
+public class    RestaurantController {
     private final RestaurantService restaurantService;
 
 
@@ -29,7 +29,7 @@ public class RestaurantController {
 
     @GetMapping("/restaurantsearchname")
     public String searchRestaurantForm(){
-        return "/restaurants/restaurantsearch";
+        return "restaurants/restaurantsearch";
     }
 
     @PostMapping("/restaurants/search")

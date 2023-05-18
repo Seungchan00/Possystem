@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,10 +27,15 @@ public class TableInfoController {
        Restaurant restaurant = restaurantService.findOne(restaurantsid);                   //restaurantid값을 받아서 찾음 식당객체를 가져옴
 
         List<TableInfo> tableInfos = tableInfoService.findtableinfobyid(restaurantsid);
+        List<Long> tableIds = tableInfos.stream().map(TableInfo::getId).collect(Collectors.toList());
+
         model.addAttribute("tableInfos",tableInfos);
+        model.addAttribute("tableIds", tableIds);
+
         session.setAttribute("restaurant", restaurant);
         return "restaurants/restaurantbutton";
     }
+
 
 
 }

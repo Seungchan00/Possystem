@@ -1,27 +1,26 @@
 package PosSys.PosSys.controller;
 
 
-import PosSys.PosSys.domain.Menu;
-import PosSys.PosSys.domain.Restaurant;
-import PosSys.PosSys.domain.TableInfo;
-import PosSys.PosSys.domain.TableSeat;
+import PosSys.PosSys.domain.*;
 import PosSys.PosSys.service.MenuService;
+import PosSys.PosSys.service.ReservationService;
 import PosSys.PosSys.service.RestaurantService;
 import PosSys.PosSys.service.TableInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 
 public class apiController {
-
+    private final ReservationService reservationService;
     private final RestaurantService restaurantService;
     private final TableInfoService tableInfoService;
     private final MenuService menuService;
@@ -44,6 +43,7 @@ public class apiController {
         tableInfo.setTable_y(request.getTable_y());
         tableInfo.setId(request.getTable_id());
         tableInfo.setTable_seat(TableSeat.NOSEATED);
+        tableInfo.setRemaintime(0);
         Long restaurantId = request.getRestaurant_id();
         Restaurant restaurant = restaurantService.findOne(restaurantId);
         tableInfo.setRestaurant(restaurant);
@@ -51,16 +51,34 @@ public class apiController {
         tableInfoService.saveTable(tableInfo);
 
     }
+    @PostMapping("/check") //예약 확인
+    public void reservationCheck(@RequestBody ReservationRequest request) {
+        Long restaurant_id = request.getRestaurant_id();
+        Long table_number = request.getTable_number();
+        System.out.println(restaurant_id +  table_number);
+        List<Reservation> reservations = reservationService.getReservationsByRestaurantIdTableId(restaurant_id, table_number);
+
+        for (Reservation reservation : reservations) {
+            reservation.setReservationstatus(Reservationstatus.RESERVED);
+            reservationService.saveReservation(reservation);
+        }
+
+
+    }
 
 
     @PostMapping("/menu")// menu 기능
-    public void addMenu(@RequestBody MenuRequest request){              //메뉴추가     Table_id, Menu_name ,Menu_count
+    public ResponseEntity<?> addMenu(@RequestBody MenuRequest request){              //메뉴추가     Table_id, Menu_name ,Menu_count
 
         List<String> menuList = request.getMenu();
         List<Integer> quantityList = request.getQuantity();
         Long tableInfoId= request.getTable_id();
         TableInfo tableinfo =  tableInfoService.findOne(tableInfoId);
 
+        if (tableinfo == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid table info ID. Please provide a valid ID.");
+        }
 
         for (int i = 0; i < menuList.size(); i++) {
             Menu menu = new Menu();
@@ -69,27 +87,23 @@ public class apiController {
             menu.setTableInfo(tableinfo);
             menuService.saveMenu(menu);
         }
+        return ResponseEntity.ok("Menu items added successfully.");
     }
-        //System.out.println(request.getMenu_name()+request.getMenu_count()+request.getTable_id());
-        //menu.setMenu_name(request.getMenu_name());
-        //menu.setMenu_count(request.getMenu_count());
-        // tableinfo.setTable_seat(TableSeat.SEATED);
-        // tableinfo.setTable_people(request.getTable_people());
-
-       // tableInfoService.saveTable(tableinfo);
-        //menuService.saveMenu(menu);
-
     @PostMapping("/person")
     public void addPerson(@RequestBody MenuRequest request){
 
         Long tableinfoid = request.getTable_id();
         TableInfo tableinfo = tableInfoService.findOne(tableinfoid);
-
+        LocalDateTime currentTime = LocalDateTime.now();
+        tableinfo.setTable_starttime(currentTime);
         tableinfo.setTable_people(request.getTable_people());
         tableinfo.setTable_seat(TableSeat.SEATED);
-
+        tableinfo.setRemaintime(request.getRemaintime());
         tableInfoService.saveTable(tableinfo);
 
+        tableInfoService.updateRemainingTimes();
+     //   int remainingTime = request.getRemaintime();
+     //   tableInfoService.updateRemainingTime(tableinfoid, remainingTime);
     }
     @PostMapping("/update_table_status")
     public void UpdateSeat(@RequestBody UpdateRequest request){         // table_id , Tableseat  테이블 번호, 테이블 정보 --> 결제했을때 테이블 정보 reset
@@ -101,107 +115,39 @@ public class apiController {
         //if(request.getTableSeat() == false) {
         tableinfo.setTable_seat(TableSeat.NOSEATED);
         //}
+        tableinfo.setTable_starttime(null);
         tableinfo.setTable_people(0);
-
+        tableinfo.setRemaintime(0);
         tableInfoService.saveTable(tableinfo);
+
+    }
+
+    @GetMapping("/tables")
+    public String showTables(Model model) {
+        List<TableInfo> tableInfos = tableInfoService.findtableinfos();
+        List<Long> tableIds = tableInfos.stream().map(TableInfo::getId).collect(Collectors.toList());
+
+        model.addAttribute("tableInfos", tableInfos);
+        model.addAttribute("tableIds", tableIds);
+
+        return "your_template_name_here";
+    }
+
+    @GetMapping("timeset")
+    public List<TableInfo> getTableInfos() {
+        return tableInfoService.findtableinfos();
     }
 
 
-/*
-    @PostMapping("/position")
-    public String addRestaurant(@RequestBody RestaurantRequest request, Model model) {
-        model.addAttribute("restaurant_id", request.getRestaurant_id());
-        model.addAttribute("restaurant_name", request.getRestaurant_name());
-        model.addAttribute("restaurant_location", request.getRestaurant_location());
-        model.addAttribute("table_x", request.getTable_x());
-        model.addAttribute("table_y", request.getTable_y());
-        RestaurantService.saveRestaurant(request);
-        return "restaurant";
+    @GetMapping("timeset/{tableId}/{remainingTime}")
+    public void updateRemainingTime(@PathVariable Long tableId, @PathVariable int remainingTime) {
+        tableInfoService.updateRemainingTimes();
     }
 
-    @PostMapping("/menu")
-    public String addMenu(@RequestBody MenuRequest request, Model model) {
-        model.addAttribute("table_id", request.getTable_id());
-        model.addAttribute("menu", request.getMenu());
-        model.addAttribute("menu_num", request.getMenu_num());
 
-        return "restaurant";
-    }*/
+    @GetMapping("/get_remaining_time/{tableId}")
+    public int getRemainingTime(@PathVariable("tableId") Long tableId) {
+        return tableInfoService.findOne(tableId).getRemaintime();
+    }
+
 }
-  /*
-}
-
-    @app.route('/update', methods=['GET'])
-    def get_button_values():
-    global table_seat1, table_seat2, table_seat3, table_seat4, table_seat5, table_seat6, table_seat7, table_seat8
-    return jsonify({
-        'seat1': table_seat1,
-                'seat2': table_seat2,
-                'seat3': table_seat3,
-                'seat4': table_seat4,
-                'seat5': table_seat5,
-                'seat6': table_seat6,
-                'seat7': table_seat7,
-                'seat8': table_seat8
-    })
-
-    @app.route('/send', methods=['POST'])
-    def update_button_values():
-    global table_seat1, table_seat2, table_seat3, table_seat4, table_seat5, table_seat6, table_seat7, table_seat8
-    data = request.json
-            table_seat1 = data['table_seat1']
-    table_seat2 = data['table_seat2']
-    table_seat3 = data['table_seat3']
-    table_seat4 = data['table_seat4']
-    table_seat5 = data['table_seat5']
-    table_seat6 = data['table_seat6']
-    table_seat7 = data['table_seat7']
-    table_seat8 = data['table_seat8']
-
-
-            return jsonify({'message': 'Data received successfully'})
-
-    @app.route('/api/timeData', methods=['POST'])
-    def update_time():
-    data = request.get_json()
-    table_start_time = data['table_start_time']
-    table_end_time = data['table_end_time']
-
-            # 로그에 시작시간과 종료시간 출력
-    print(f"Start Time: {table_start_time}")
-    print(f"End Time: {table_end_time}")
-
-    # TODO: 시작시간과 종료시간을 이용하여 원하는 작업 수행
-
-    return 'Time updated successfully'
-
-            # 초기화
-            table_status = {
-            "Table1": False,
-            "Table2": False,
-            "Table3": False,
-            "Table4": False,
-            "Table5": False,
-            "Table6": False,
-            "Table7": False,
-            "Table8": False
-}
-
-    @app.route('/update_table_status', methods=['POST'])
-    def update_table_status():
-        data = request.json
-        table_number = data['table_number']
-        table_seat = data['table_seat']
-
-        # table_name에 해당하는 테이블 상태 업데이트
-        table_status[table_number] = table_seat
-
-        # 결과값 출력
-        print(f"테이블 번호 : {table_number} 자리여부: {table_seat}")
-
-        return jsonify({'message': 'Table status updated successfully'})
-
-        if __name__ == '__main__':
-        app.run(host='172.31.1.142', port=3105)
-}
-*/

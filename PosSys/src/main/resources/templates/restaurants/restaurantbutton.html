@@ -1,73 +1,74 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <link rel="stylesheet" type="text/css" href="/css/table-style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
 <body>
 <div class="container">
-    <thead>
-    <tr>
-        <th>테이블번호</th>
-        <th>자리여부</th>
-        <th></th>
-    </tr>
-    </thead>
-    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div th:replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+
     <div>
         <div th:each="tableinfo : ${tableInfos}">
             <a th:href="@{/reservation/{tableid}/new(tableid=${tableinfo.id})}"
-                th:text="${tableinfo.id}"
-                th:style="${tableinfo.table_seat == T(PosSys.PosSys.domain.TableSeat).SEATED} ? 'background-color:green; position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px; width:50px; height:50px;'
-                : 'background-color:red; position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px; width:50px; height:50px;'">
+               th:text="${tableinfo.table_seat == T(PosSys.PosSys.domain.TableSeat).SEATED} ? '예약 불가' : '예약 가능'"
+               th:class="${tableinfo.table_seat == T(PosSys.PosSys.domain.TableSeat).SEATED} ? 'button button-unavailable' : 'button button-available'"
+               th:style="'position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} +'px;' ">
             </a>
+            <div id="time-display-${tableinfo.id}" th:style="'position:absolute; left:' + ${tableinfo.table_x} + 'px; top:' + (${tableinfo.table_y} + 50) +'px;'">
+                예상시간: <span th:text="${tableinfo.remaintime / 60}"></span>분
+            </div>
         </div>
     </div>
-    <div th:replace="fragments/footer :: footer"/>
 </div><!-- /container -->
+<script>
+    const tableIds = /*[[${tableIds}]]*/ [];
+
+    function fetchRemainingTime(tableId) {
+        fetch(`/get_remaining_time/${tableId}`, {
+            cache: 'no-store' // 캐시 사용 안 함
+        })
+            .then((response) => response.text())
+            .then((remainingTime) => {
+                displayRemainingTime(parseInt(remainingTime), tableId);
+            });
+
+    }
+
+
+    function displayRemainingTime(remainingTime, tableId) {
+        console.log(`Trying to update time for tableId: ${tableId}`);
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        const timeDisplay = document.getElementById(`time-display-${tableId}`);
+        console.log(`Found element:`, timeDisplay);
+        timeDisplay.innerHTML = `예상시간: ${minutes}분 ${seconds}초`;
+    }
+
+
+    function updateAllRemainingTimes() {
+        tableIds.forEach((tableId) => {
+            fetchRemainingTime(tableId);
+        });
+    }
+
+    window.onload = function() {
+        // 처음 실행 시 남은 시간을 가져옵니다.
+        tableIds.forEach((tableId) => {
+            const timeElement = document.getElementById(`initial-time-display-${tableId}`);
+            const seconds = parseInt(timeElement.textContent);
+            displayRemainingTime(seconds, tableId);
+        });
+
+        // 남은 시간을 업데이트합니다.
+        updateAllRemainingTimes();
+
+        // 1분마다 남은 시간을 업데이트합니다.
+        setInterval(updateAllRemainingTimes, 60000);
+    }
+
+
+</script>
 </body>
 </html>
-<!--
- </div>
-            <tr th:each="tableinfo : ${tableInfos}">
-                <button th:text="${tableinfo.id}"
-                        th:style="${tableinfo.table_seat == 'SEATED'} ? 'background-color:green; position:absolute;left:'
-                        + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px;' : 'background-color:red;position:absolute; left:'
-                         + ${tableinfo.table_x} + 'px; top:' + ${tableinfo.table_y} + 'px;'">
-
-                </button>
- <div th:each="tableinfo : ${tableinfos}">
-        <button th:text="${tableinfo.id}"
-                th:style="${tableinfo.table_seat == T(tableinfo.table_seat).SEATED} ? 'background-color:green' : 'background-color:red';
-            position:absolute;
-            left: ${tableinfo.table_x }px;
-            top: ${tableinfo.table_y }px;">
-
-        </button>
-    </div>
-    <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
-<body>
-<div class="container">
-    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>테이블번호</th>
-                <th>자리여부</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="tableinfo : ${tableInfos}">
-                <td th:text="${tableinfo.id}"></td>
-                <td th:text="${tableinfo.table_seat}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div th:replace="fragments/footer :: footer"/>
-</div>
-</body>
-</html>
-
--->
