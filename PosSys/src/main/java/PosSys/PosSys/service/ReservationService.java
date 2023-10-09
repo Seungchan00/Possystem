@@ -32,7 +32,7 @@ public class ReservationService {
 
         reservation.setMember(member);
         reservation.setPeople(people);
-        reservation.setTableNumber(tableId);
+        reservation.setTablenumber(tableId);
         reservation.setReservationstatus(Reservationstatus.NOTRESERVED);
 
         reservationRepository.save(reservation);

@@ -15,7 +15,7 @@ public class Reservation {
     private Long id;
 
     @Column(name = "table_number")
-    private Long tableNumber;
+    private Long tablenumber;
 
     private int people;
 

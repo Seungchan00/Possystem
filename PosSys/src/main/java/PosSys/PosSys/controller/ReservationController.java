@@ -59,7 +59,7 @@ public class ReservationController {
         Reservation reservation = new Reservation();
 
         System.out.println(tableid + "/" + name + "/" + people + "/" + phone + "/" + restaurant.getId() + "/" + member.getId());
-        reservation.setTableNumber(tableid);
+        reservation.setTablenumber(tableid);
         reservation.setPeople(people);
         reservation.setReservationstatus(Reservationstatus.NOTRESERVED);
         reservation.setRestaurant(restaurant);
@@ -76,7 +76,7 @@ public class ReservationController {
         List<String> reservationStrings = new ArrayList<>();
         for (Reservation reservation : reservations) {
             String reservationString = String.format("이름: %s, 인원: %d, 핸드폰: %s, 희망 테이블 번호: %d",
-                    reservation.getMember().getName(), reservation.getPeople(), reservation.getMember().getPhoneNumber(), reservation.getTableNumber());
+                    reservation.getMember().getName(), reservation.getPeople(), reservation.getMember().getPhoneNumber(), reservation.getTablenumber());
             reservationStrings.add(reservationString);
         }
         return ResponseEntity.ok(reservationStrings);
